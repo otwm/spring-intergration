@@ -1,4 +1,4 @@
-package com.example.config;
+package com.example.tcp;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

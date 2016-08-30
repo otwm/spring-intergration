@@ -1,5 +1,7 @@
 package com.example;
 
+import com.example.tcp.ClientConfig;
+import com.example.tcp.Gateway;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,10 +29,10 @@ import static org.junit.Assert.assertThat;
  * Created by kdo on 16. 8. 30.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {Config.class, TcpNotNeedServerTest.ServerConfig.class})
+@ContextConfiguration(classes = {ClientConfig.class, TcpNotNeedServerTest.ServerConfig.class})
 public class TcpNotNeedServerTest {
     @Autowired
-    Config.Gateway gateway;
+    Gateway gateway;
 
     @Autowired
     AbstractServerConnectionFactory crLfServer;

@@ -1,32 +1,33 @@
-package com.example;
+package com.example.tcp;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.IntegrationComponentScan;
-import org.springframework.integration.annotation.MessagingGateway;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.annotation.Transformer;
-import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.ip.tcp.TcpOutboundGateway;
 import org.springframework.integration.ip.tcp.connection.AbstractClientConnectionFactory;
 import org.springframework.integration.ip.tcp.connection.TcpNetClientConnectionFactory;
-import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 
 /**
+ * 클라이언트 설정
  * Created by kdo on 16. 8. 30.
  */
 @EnableIntegration
 @IntegrationComponentScan
 @Configuration
-public class Config {
+public class ClientConfig {
 
-    private int port = 9876;
+    /**
+     * 서버 서비스 포트
+     */
+    private final int port = 9876;
 
-    @MessagingGateway(defaultRequestChannel = "toTcp")
-    public interface Gateway {
-        String sendSimple(String param);
+    @Bean
+    public AbstractClientConnectionFactory connectionFactory() {
+        return new TcpNetClientConnectionFactory("localhost", this.port);
     }
 
     @Bean
@@ -38,18 +39,8 @@ public class Config {
         return gate;
     }
 
-    @Bean
-    public MessageChannel fromTcp() {
-        return new DirectChannel();
-    }
-
-    @Bean
-    public AbstractClientConnectionFactory clientCF() {
-        return new TcpNetClientConnectionFactory("localhost", this.port);
-    }
-
     @Transformer(inputChannel = "resultToString")
-    public String convertResult(byte[] bytes) {
+    public String resultToString(byte[] bytes) {
         return new String(bytes);
     }
 }
