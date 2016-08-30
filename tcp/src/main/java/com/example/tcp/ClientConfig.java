@@ -25,9 +25,16 @@ public class ClientConfig {
      */
     private final int port = 9876;
 
+    /**
+     * 타임 아웃
+     */
+    private final int timeOut = 100000;
+
     @Bean
     public AbstractClientConnectionFactory connectionFactory() {
-        return new TcpNetClientConnectionFactory("localhost", this.port);
+        TcpNetClientConnectionFactory factory = new TcpNetClientConnectionFactory("localhost", this.port);
+        factory.setSoTimeout(timeOut);
+        return factory;
     }
 
     @Bean

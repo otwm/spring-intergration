@@ -27,11 +27,17 @@ public class TcpServerConfig {
         TcpInboundGateway inGate = new TcpInboundGateway();
         inGate.setConnectionFactory(connectionFactory);
         inGate.setRequestChannel(fromTcp());
+        inGate.setErrorChannel(errorTcp());
         return inGate;
     }
 
     @Bean
     public MessageChannel fromTcp() {
+        return new DirectChannel();
+    }
+
+    @Bean
+    public MessageChannel errorTcp() {
         return new DirectChannel();
     }
 
@@ -53,6 +59,10 @@ public class TcpServerConfig {
             return new String(bytes);
         }
 
+        @Transformer(inputChannel = "errorTcp")
+        public String errorHandler(byte[] bytes) {
+            return new String(bytes);
+        }
     }
 
     @Bean
